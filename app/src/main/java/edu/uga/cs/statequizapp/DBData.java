@@ -212,7 +212,6 @@ public class DBData {
             cursor = db.query(DBHelper.TABLE_STATE, allStateColumns, DBHelper.STATE_COLUMN_ID + " = " + id, null, null, null, null);
             if(cursor.getCount() > 0 ){
                 while(cursor.moveToNext() ){
-                    long id = cursor.getLong(cursor.getColumnIndex(DBHelper.STATE_COLUMN_ID));
                     String name = cursor.getString(cursor.getColumnIndex(DBHelper.STATE_COLUMN_STATE));
                     String capital = cursor.getString(cursor.getColumnIndex(DBHelper.STATE_COLUMN_CAPITAL));
                     String[] tmpCities = new String[2];
