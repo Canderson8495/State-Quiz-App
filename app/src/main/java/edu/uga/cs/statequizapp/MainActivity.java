@@ -2,6 +2,7 @@ package edu.uga.cs.statequizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,7 +16,7 @@ import com.opencsv.exceptions.CsvValidationException;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String DEBUG_TAG = "CSVActivity";
+    public static final String DEBUG_TAG = "MainActivity";
     private DBData dbData = null;
 
     @Override
@@ -95,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
-
+        //Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+        //startActivity(intent);
     }
 
     @Override
@@ -117,4 +119,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-

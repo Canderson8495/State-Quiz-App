@@ -5,6 +5,9 @@
       <map>
         <entry key="..\:/Users/chris/AndroidStudioProjects/State-Quiz-App/app/src/main/res/layout/activity_main.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/chris/AndroidStudioProjects/State-Quiz-App/app/src/main/res/layout/activity_splash_screen.xml" value="0.20520833333333333" />
+        <entry key="app/src/main/res/layout/activity_quiz_results.xml" value="0.16979166666666667" />
+        <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.16979166666666667" />
+        <entry key="app/src/main/res/layout/result.xml" value="0.16979166666666667" />
       </map>
     </option>
   </component>
