@@ -240,7 +240,9 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
             choices[2].setText(randomCityChoice);
             choiceMapping.add(randomCityChoice);
             cities.remove(randomCityChoice);
-        new DBQuizCreate().execute(newQuiz);
+            if(state.size() > 0){
+                new DBQuizCreate().execute(newQuiz);
+            }
         }
     }
 
