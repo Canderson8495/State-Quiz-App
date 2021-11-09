@@ -9,6 +9,7 @@
     tools:context=".QuizActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="300dp"
         android:layout_height="141dp"
         android:layout_marginTop="32dp"
@@ -63,5 +64,14 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textSize="24sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Question"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

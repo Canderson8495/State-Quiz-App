@@ -53,7 +53,7 @@ public class State {
     }
 
     public String toString() {
-        return id + ": " + name + " " + capital + " " + cities;
+        return id + ": " + name + " " + capital + " " + cities[0] + " " + cities[1];
 
     }
 }

@@ -10,22 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StateQuizApp">
         <activity
+            android:name=".ResultActivity"
+            android:exported="true"
+            android:label="@string/title_activity_result"
+            android:theme="@style/Theme.StateQuizApp.NoActionBar" />
+        <activity
             android:name=".SplashScreen"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
         <activity
             android:name=".QuizActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

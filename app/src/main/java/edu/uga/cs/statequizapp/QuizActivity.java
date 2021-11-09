@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -13,11 +14,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +33,7 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
     private TextView stateNameText;
     private RadioButton[] choices = new RadioButton[3];
     private RadioGroup radioGroup;
+    private Button nextButton;
     private ConstraintLayout layout;
     Quiz newQuiz = new Quiz();
     private DBData dbData = null;
@@ -118,13 +122,6 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
                 choiceMapping.add(randomCityChoice);
                 cities.remove(randomCityChoice);
             }
-
-
-
-
-            //increment currentQueston
-            //Save quiz to DB/Update quiz
-            //Start next question or finish
         }
         return true;
     }
@@ -239,13 +236,86 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
         choices[0] =findViewById(R.id.choice1);
         choices[1] = findViewById(R.id.choice2);
         choices[2] = findViewById(R.id.choice3);
+        nextButton = findViewById(R.id.next);
         layout = findViewById(R.id.layout);
         radioGroup = findViewById(R.id.radioGroup);
         newQuiz.setCurrentQuestion(1);
+        newQuiz.setScore(0);
         new StateDBReader().execute();
         //I need the state name and the capital and the two alternatives
 
+
+
         //Implement swipe handler
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(DEBUG_TAG, "In OnClick");
+                String correctAnswer = newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getCapital();
+                Log.d(DEBUG_TAG, "Correct Answer " + correctAnswer);
+                int userAnswerID = radioGroup.getCheckedRadioButtonId();
+                int correct;
+                switch(userAnswerID){
+                    case R.id.choice1:
+                        correct = 0;
+                        break;
+                    case R.id.choice2:
+                        correct = 1;
+                        break;
+                    case R.id.choice3:
+                        correct = 2;
+                        break;
+                    default:
+                        return;
+                }
+
+                String userAnswer = choiceMapping.get(correct);
+                Log.d(DEBUG_TAG, "User Answer " + userAnswer);
+                if(userAnswer.equalsIgnoreCase(correctAnswer)){
+                    newQuiz.setScore(newQuiz.getScore()+1);
+                }
+                if(newQuiz.getCurrentQuestion() < 6){
+                    newQuiz.setCurrentQuestion(newQuiz.getCurrentQuestion()+1);
+                }else{
+                    newQuiz.setCurrentQuestion(-1);
+                }
+
+                new DBQuizUpdate().execute(newQuiz);
+
+                if(newQuiz.getCurrentQuestion() == -1){
+                    //Send to finishing screen
+                    Log.d(DEBUG_TAG, "QuizActivity.OnCLick()");
+                    Log.d(DEBUG_TAG, "Score: " + String.valueOf(((double)newQuiz.getScore()/6)*100));
+                    Intent intent = new Intent(view.getContext(), ResultActivity.class);
+                    String score = String.valueOf(((double)newQuiz.getScore()/6)*100);
+                    intent.putExtra("score",score);
+                    startActivity(intent);
+                }else{
+                    choiceMapping.clear();
+                    String stateName = newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getName();
+                    stateNameText.setText(questionStem + stateName + "?");
+                    String stateCapital = newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getCapital();
+                    ArrayList<String> cities = new ArrayList<>();
+                    cities.add(stateCapital);
+                    cities.addAll(Arrays.asList(newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getCities()));
+
+
+                    Random ran = new Random();
+                    String randomCityChoice = cities.get(ran.nextInt(2));
+                    choices[0].setText(randomCityChoice);
+                    choiceMapping.add(randomCityChoice);
+                    cities.remove(randomCityChoice);
+                    randomCityChoice = cities.get(ran.nextInt(1));
+                    choices[1].setText(randomCityChoice);
+                    choiceMapping.add(randomCityChoice);
+                    cities.remove(randomCityChoice);
+                    randomCityChoice = cities.get(0);
+                    choices[2].setText(randomCityChoice);
+                    choiceMapping.add(randomCityChoice);
+                    cities.remove(randomCityChoice);
+                }
+            }
+        });
     }
 
     @Override
