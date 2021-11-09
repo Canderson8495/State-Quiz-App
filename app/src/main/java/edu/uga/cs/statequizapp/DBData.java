@@ -243,6 +243,55 @@ public class DBData {
         return quiz;
     }
 
+    public Quiz getExistingQuiz(){
+        Quiz quiz = null;
+        Cursor cursor = null;
+        try {
+            cursor = db.query(DBHelper.TABLE_QUIZ, allQuizColumns, DBHelper.QUIZ_COLUMN_CURRENT_QUESTION + "!=-1", null, null, null, null);
+            if(cursor.getCount() > 0 ){
+                while(cursor.moveToNext() ){
+                    //PUll all DB values
+                    long id = cursor.getLong(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_ID));
+                    int[] stateIDs = new int[6];
+                    stateIDs[0] = cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_STATE1));
+                    stateIDs[1] = cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_STATE2));
+                    stateIDs[2] = cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_STATE3));
+                    stateIDs[3] = cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_STATE4));
+                    stateIDs[4] = cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_STATE5));
+                    stateIDs[5] = cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_STATE6));
+
+                    int currentQuestion = cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_CURRENT_QUESTION));
+                    int score = cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_SCORE));
+                    String dateCompleted = cursor.getString(cursor.getColumnIndex(DBHelper.QUIZ_COLUMN_DATE_COMPLETED));
+                    State[] states = new State[6];
+                    //Do another lookup to get the states as well
+                    for(int x = 0; x < stateIDs.length; x++){
+                        states[x] = getStateByID(stateIDs[x]);
+                    }
+                    Log.d(DEBUG_TAG, "states loaded");
+                    quiz = new Quiz(states, currentQuestion, score, dateCompleted != null ? new Date(Long.parseLong(dateCompleted)) : null);
+                    quiz.setId(id);
+                    // set the id (the primary key) of this object
+                    // add it to the list
+                    Log.d( DEBUG_TAG, "Retrieved Quiz: " + quiz );
+                }
+
+            }
+            Log.d( DEBUG_TAG, "Number of records from DB: " + cursor.getCount() );
+        }catch( Exception e ){
+            Log.d( DEBUG_TAG, "Exception caught: " + e );
+        }
+        finally{
+            // we should close the cursor
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        // return a list of retrieved job leads
+        return quiz;
+
+    }
+
     public State getStateByID(int id){
         ArrayList<State> states = new ArrayList<>();
         Cursor cursor = null;

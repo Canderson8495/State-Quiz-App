@@ -31,6 +31,7 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
     private static final String questionStem = "What is the capital of ";
     private ArrayList<String> choiceMapping = new ArrayList<>();
     private TextView stateNameText;
+    private TextView questionText;
     private RadioButton[] choices = new RadioButton[3];
     private RadioGroup radioGroup;
     private Button nextButton;
@@ -178,7 +179,17 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
         @Override
         protected List<State> doInBackground( Void... params ) {
             Log.d( DEBUG_TAG, "QuizActivity.StateDBReader.doInBackground()" );
-            List<State> states = dbData.retrieveAllStates();
+            Quiz quiz = dbData.getExistingQuiz();
+
+            ArrayList<State> states = new ArrayList<>();
+            if(quiz == null){
+                Log.d(DEBUG_TAG, "There is no existing quiz");
+                states.addAll(dbData.retrieveAllStates());
+            }else{
+                Log.d(DEBUG_TAG, "There is an existing quiz");
+                newQuiz = quiz;
+            }
+
             Log.d(DEBUG_TAG, "Content size of states  =  " + states.size());
             return states;
         }
@@ -189,26 +200,33 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
         // onPostExecute is like the notify method in an asynchronous method call discussed in class.
         @Override
         protected void onPostExecute( List<State> state ) {
-            Log.d(DEBUG_TAG, "Content size of states  =  " + state.size());
-            Log.d( DEBUG_TAG, "QuizActivity.StateDBReader.onPostExecute()" );
             Random ran = new Random();
+            if(state.size() != 0) {
+                Log.d(DEBUG_TAG, "Content size of states  =  " + state.size());
+                Log.d(DEBUG_TAG, "QuizActivity.StateDBReader.onPostExecute()");
 
-            // generating integer
-            ArrayList<Integer> randomStateIDs = new ArrayList<Integer>();
-            State[] states = new State[6];
-            while(randomStateIDs.size() < 6) {
-                int newState = ran.nextInt(50);
-                if (!randomStateIDs.contains(newState)) {
-                    states[randomStateIDs.size()] = state.get(newState);
-                    randomStateIDs.add(newState);
+                // generating integer
+                ArrayList<Integer> randomStateIDs = new ArrayList<Integer>();
+                State[] states = new State[6];
+                while (randomStateIDs.size() < 6) {
+                    int newState = ran.nextInt(50);
+                    if (!randomStateIDs.contains(newState)) {
+                        states[randomStateIDs.size()] = state.get(newState);
+                        randomStateIDs.add(newState);
+                    }
                 }
+                newQuiz.setStates(states);
+                newQuiz.setCurrentQuestion(1);
+                newQuiz.setScore(0);
             }
-            newQuiz.setStates(states);
-            String stateName = newQuiz.getStates()[0].getName();
+
+
+            String stateName = newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getName();
             stateNameText.setText(questionStem + stateName + "?");
-            String stateCapital = newQuiz.getStates()[0].getCapital();
+            String stateCapital = newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getCapital();
             ArrayList<String> cities = new ArrayList<>();
-            cities.addAll(Arrays.asList(newQuiz.getStates()[0].getCities()));
+            questionText.setText("Question " + newQuiz.getCurrentQuestion());
+            cities.addAll(Arrays.asList(newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getCities()));
             cities.add(stateCapital);
                 String randomCityChoice = cities.get(ran.nextInt(2));
                 choices[0].setText(randomCityChoice);
@@ -237,10 +255,10 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
         choices[1] = findViewById(R.id.choice2);
         choices[2] = findViewById(R.id.choice3);
         nextButton = findViewById(R.id.next);
+        questionText = findViewById(R.id.question);
         layout = findViewById(R.id.layout);
         radioGroup = findViewById(R.id.radioGroup);
-        newQuiz.setCurrentQuestion(1);
-        newQuiz.setScore(0);
+
         new StateDBReader().execute();
         //I need the state name and the capital and the two alternatives
 
@@ -296,10 +314,9 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
                     stateNameText.setText(questionStem + stateName + "?");
                     String stateCapital = newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getCapital();
                     ArrayList<String> cities = new ArrayList<>();
+                    questionText.setText("Question " + newQuiz.getCurrentQuestion());
                     cities.add(stateCapital);
                     cities.addAll(Arrays.asList(newQuiz.getStates()[newQuiz.getCurrentQuestion()-1].getCities()));
-
-
                     Random ran = new Random();
                     String randomCityChoice = cities.get(ran.nextInt(2));
                     choices[0].setText(randomCityChoice);
