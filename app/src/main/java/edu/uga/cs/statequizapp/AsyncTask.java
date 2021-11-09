@@ -1,5 +1,6 @@
 package edu.uga.cs.statequizapp;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -74,4 +75,8 @@ public abstract class AsyncTask<Param,Result> {
     // These abstract methods are just like in the AsyncTask
     protected abstract Result doInBackground( Param... arguments );
     protected abstract void onPostExecute( Result result );
+
+    // This method will run as a background process to write into db.
+    // It will be automatically invoked by Android, when we call the execute method
+    // in the onClick listener of the Save button.
 }

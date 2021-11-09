@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbData = new DBData( this );
-
     }
 
     // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of a job lead, asynchronously.

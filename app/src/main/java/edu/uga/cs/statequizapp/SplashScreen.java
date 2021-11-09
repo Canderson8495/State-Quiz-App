@@ -32,10 +32,10 @@ public class SplashScreen extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            Intent intent;
+            Intent intent = null;
 
             if (screenChoice == 0) { // Screen Choice 0 goes to Quiz Mode
-                //intent = new Intent(view.getContext(), QuizActivity.class);
+                intent = new Intent(view.getContext(), QuizActivity.class);
             }
             else { // Screen Choice != 0 goes to Quiz History
                 //intent = new Intent(view.getContext(), ResultsActivity.class);

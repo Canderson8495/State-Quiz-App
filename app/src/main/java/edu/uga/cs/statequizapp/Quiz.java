@@ -12,7 +12,7 @@ public class Quiz {
     public Quiz(){
         this.id = -1;
         this.states = null;
-        this.currentQuestion = -1;
+        this.currentQuestion = 0;
         this.score = -1;
         this.dateCompleted = null;
     }
