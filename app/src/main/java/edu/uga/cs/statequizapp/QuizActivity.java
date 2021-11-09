@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -298,6 +299,7 @@ public class QuizActivity extends AppCompatActivity implements GestureDetector.O
                     newQuiz.setCurrentQuestion(newQuiz.getCurrentQuestion()+1);
                 }else{
                     newQuiz.setCurrentQuestion(-1);
+                    newQuiz.setDateCompleted(new Date());
                 }
 
                 new DBQuizUpdate().execute(newQuiz);

@@ -238,7 +238,7 @@ public class DBData {
         int update = db.update(DBHelper.TABLE_QUIZ, values, DBHelper.QUIZ_COLUMN_ID + "=?", new String[]{String.valueOf(quiz.getId())});
 
 
-        Log.d( DEBUG_TAG, "updated quiz with id: " + String.valueOf( quiz.getId() ) );
+        Log.d( DEBUG_TAG, "updated quiz: " + quiz );
 
         return quiz;
     }
@@ -353,6 +353,7 @@ public class DBData {
                         states[x].setId(stateIDs[x]);
                     }
                     Quiz quiz = new Quiz(states, currentQuestion, score, new Date(Long.parseLong(dateCompleted)));
+
 
                     quiz.setId( id ); // set the id (the primary key) of this object
                     // add it to the list
