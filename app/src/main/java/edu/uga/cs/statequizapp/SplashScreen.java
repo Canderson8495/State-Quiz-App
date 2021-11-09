@@ -38,7 +38,7 @@ public class SplashScreen extends AppCompatActivity {
                 intent = new Intent(view.getContext(), QuizActivity.class);
             }
             else { // Screen Choice != 0 goes to Quiz History
-                //intent = new Intent(view.getContext(), ResultsActivity.class);
+                intent = new Intent(view.getContext(), ResultActivity.class);
             }
             startActivity(intent);
         }

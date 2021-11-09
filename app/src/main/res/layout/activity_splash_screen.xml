@@ -14,10 +14,18 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="172dp"
+        android:layout_marginTop="128dp"
         android:text="Welcome"
         android:textAlignment="center"
         android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32sp"
+        android:text="This is a 6 question quiz on state capitals. Click Quiz Mode to begin quiz or click Quiz History to see previous results!"
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/quiz_mode"
